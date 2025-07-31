@@ -1,25 +1,35 @@
- # Node.js Express API - Structured RESTful API Project
+# Advanced RESTful API with MySQL & JWT Authentication
 
-A demonstration of structured Node.js Express application with organized routing and controllers. This project showcases best practices for organizing Express.js applications by separating routes and controllers into different modules.
+A comprehensive Node.js Express API with MySQL database integration, JWT authentication, and structured architecture. Perfect for backend development portfolios.
 
 ## 🚀 Features
 
-- **Structured Architecture**: Organized code structure with separate routes and controllers
-- **RESTful API**: Complete CRUD operations for array management
-- **Environment Configuration**: Uses dotenv for environment variables
-- **Modular Design**: Clean separation of concerns with dedicated modules
+* **MySQL Database**: Persistent data storage with proper relationships
+* **JWT Authentication**: Secure user registration and login
+* **RESTful API**: Complete CRUD operations for items management
+* **Structured Architecture**: Organized code with controllers and routes
+* **Error Handling**: Comprehensive error management
+* **CORS Support**: Cross-origin resource sharing enabled
 
 ## 📁 Project Structure
 
 ```
 4-Structuring/
 ├── app.js                 # Main application entry point
+├── config/
+│   └── database.js        # MySQL database configuration
 ├── controller/            # Business logic controllers
 │   ├── array-controller.js
+│   ├── auth-controller.js
 │   └── home-controller.js
+├── middleware/
+│   └── auth.js           # JWT authentication middleware
 ├── routes/               # Route definitions
 │   ├── array-routes.js
+│   ├── auth-routes.js
 │   └── home-routes.js
+├── database/
+│   └── schema.sql        # MySQL database schema
 ├── package.json          # Dependencies and scripts
 └── README.md            # Project documentation
 ```
@@ -37,125 +47,142 @@ A demonstration of structured Node.js Express application with organized routing
    npm install
    ```
 
-3. **Set up environment variables**
-   Create a `.env` file in the root directory:
-   ```env
-   app_port=3000
-   ```
-
-4. **Start the server**
+3. **Set up MySQL database**
+   - Install MySQL on your system
+   - Create a database and run the schema:
    ```bash
-   node app.js
+   mysql -u root -p < database/schema.sql
    ```
 
-The server will start on port 3000 (or the port specified in your `.env` file).
+4. **Set up environment variables**
+   Create a `.env` file in the root directory:
+   ```
+   app_port=3000
+   DB_HOST=localhost
+   DB_USER=root
+   DB_PASSWORD=your_password
+   DB_NAME=restful_api_db
+   DB_PORT=3306
+   JWT_SECRET=your-super-secret-jwt-key
+   ```
+
+5. **Start the server**
+   ```bash
+   npm start
+   # or for development
+   npm run dev
+   ```
 
 ## 📡 API Endpoints
 
-### Home Routes
-- `GET /` - Returns the array data
+### Authentication API
 
-### Array Management API
+Base URL: `/api/auth`
+
+| Method | Endpoint       | Description             | Request Body       |
+| ------ | -------------- | ----------------------- | ------------------ |
+| POST   | /api/auth/register | Register new user   | {"username": "string", "email": "string", "password": "string"} |
+| POST   | /api/auth/login | Login user        | {"email": "string", "password": "string"} |
+
+### Items Management API
+
 Base URL: `/api/array`
 
-| Method | Endpoint | Description | Request Body |
-|--------|----------|-------------|--------------|
-| GET | `/api/array` | Get all array items | - |
-| GET | `/api/array/:id` | Get array item by ID | - |
-| POST | `/api/array` | Create new array item | `{"name": "string"}` |
-| PUT | `/api/array/:id` | Update array item by ID | `{"name": "string"}` |
-| DELETE | `/api/array/:id` | Delete array item by ID | - |
+| Method | Endpoint       | Description             | Request Body       |
+| ------ | -------------- | ----------------------- | ------------------ |
+| GET    | /api/array     | Get all items          | -                 |
+| GET    | /api/array/:id | Get item by ID         | -                 |
+| POST   | /api/array     | Create new item        | {"name": "string", "description": "string"} |
+| PUT    | /api/array/:id | Update item by ID      | {"name": "string", "description": "string"} |
+| DELETE | /api/array/:id | Delete item by ID      | -                 |
 
 ### Request/Response Examples
 
-#### Get All Items
+#### Register User
 ```bash
-GET /api/array
-```
-**Response:**
-```json
-[
-  {"id": 1, "name": "sajjad"},
-  {"id": 2, "name": "nazari"}
-]
+POST /api/auth/register
+Content-Type: application/json
+
+{
+  "username": "john_doe",
+  "email": "john@example.com",
+  "password": "password123"
+}
 ```
 
-#### Create New Item
+#### Login User
+```bash
+POST /api/auth/login
+Content-Type: application/json
+
+{
+  "email": "john@example.com",
+  "password": "password123"
+}
+```
+
+#### Create Item (with authentication)
 ```bash
 POST /api/array
+Authorization: Bearer YOUR_JWT_TOKEN
 Content-Type: application/json
 
 {
-  "name": "new item"
+  "name": "New Item",
+  "description": "Item description"
 }
-```
-**Response:**
-```json
-[
-  {"id": 1, "name": "sajjad"},
-  {"id": 2, "name": "nazari"},
-  {"id": 3, "name": "new item"}
-]
-```
-
-#### Update Item
-```bash
-PUT /api/array/1
-Content-Type: application/json
-
-{
-  "name": "updated name"
-}
-```
-**Response:**
-```json
-{"id": 1, "name": "updated name"}
 ```
 
 ## 🏗️ Architecture Overview
 
+### Database Schema
+- **Users Table**: User authentication and profile data
+- **Items Table**: Main data with foreign key to users
+
 ### Controllers
-Controllers handle the business logic and data manipulation:
+- **`auth-controller.js`**: User registration and login
+- **`array-controller.js`**: Items CRUD operations
+- **`home-controller.js`**: Home page logic
 
-- **`home-controller.js`**: Handles home page logic
-- **`array-controller.js`**: Manages array CRUD operations
-
-### Routes
-Routes define the API endpoints and connect them to controllers:
-
-- **`home-routes.js`**: Defines home page routes
-- **`array-routes.js`**: Defines array management routes
-
-### Main Application
-`app.js` serves as the entry point, setting up middleware and connecting routes.
+### Middleware
+- **`auth.js`**: JWT token verification
 
 ## 🔧 Dependencies
 
-- **express**: Web framework for Node.js
-- **dotenv**: Environment variable management
+* **express**: Web framework for Node.js
+* **mysql2**: MySQL database driver
+* **bcryptjs**: Password hashing
+* **jsonwebtoken**: JWT authentication
+* **cors**: Cross-origin resource sharing
+* **dotenv**: Environment variable management
 
 ## 🎯 Learning Objectives
 
 This project demonstrates:
 
-1. **Code Organization**: How to structure Express.js applications
-2. **Separation of Concerns**: Routes vs Controllers
-3. **Modular Design**: Reusable components
-4. **RESTful API Design**: Standard HTTP methods and status codes
-5. **Environment Configuration**: Using environment variables
+1. **Database Integration**: MySQL with Node.js
+2. **Authentication**: JWT-based user authentication
+3. **API Security**: Password hashing and token validation
+4. **Error Handling**: Comprehensive error management
+5. **Code Organization**: Modular architecture
+6. **RESTful Design**: Standard HTTP methods and status codes
 
 ## 🚨 Error Handling
 
-The API includes basic error handling:
-- 404 errors for not found items
-- 400 errors for invalid input (name less than 3 characters)
-- Proper HTTP status codes
+The API includes comprehensive error handling:
+
+* 400 errors for invalid input
+* 401 errors for authentication failures
+* 404 errors for not found resources
+* 500 errors for server issues
 
 ## 📝 Development Notes
 
-- The array data is stored in memory (resets on server restart)
-- Input validation requires names to be at least 3 characters long
-- IDs are auto-generated based on array length
+* Data is persisted in MySQL database
+* Passwords are hashed using bcrypt
+* JWT tokens expire after 24 hours
+* Input validation for all endpoints
+* CORS enabled for frontend integration
 
 ## 🤝 Contributing
 
@@ -170,4 +197,4 @@ This project is for educational purposes and demonstrates Node.js Express best p
 
 ---
 
-**Note**: This is a learning project demonstrating structured Express.js application development. For production use, consider adding database integration, authentication, and more robust error handling.
+**Note**: This is a learning project demonstrating advanced Express.js application development with MySQL and JWT authentication. Perfect for backend development portfolios!
