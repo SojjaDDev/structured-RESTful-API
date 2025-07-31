@@ -1,7 +1,6 @@
-
+const { array } = require("./array-controller");
 function printHelloWorld(req, res){
-    res.send("hello world");
-
+    res.send(array);
 }
 
 module.exports = {

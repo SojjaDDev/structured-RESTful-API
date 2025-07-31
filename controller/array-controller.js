@@ -1,6 +1,6 @@
 const express = require("express");
 
-let array = [{ id: 1, name: "mostafa" },
+let array = [{ id: 1, name: "sajjad" },
 { id: 2, name: "nazari"}]
 
 function getArray(req, res) {
@@ -13,7 +13,7 @@ function getArrayByID (req, res) {
     const item = find();
     if (!item)
         return res.status(404).send("not found");
-    
+
     res.send(item);
 }
 function postArray(req, res){
@@ -54,5 +54,6 @@ module.exports = {
     getArrayByID ,
     postArray ,
     putArray ,
-    deleteArray
+    deleteArray,
+    array
 }
