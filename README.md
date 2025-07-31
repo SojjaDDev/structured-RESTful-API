@@ -2,14 +2,16 @@
 
 A comprehensive Node.js Express API with MySQL database integration, JWT authentication, and structured architecture. Perfect for backend development portfolios.
 
+**Note:** Currently running with in-memory storage for immediate testing. MySQL integration is ready but temporarily disabled.
+
 ## 🚀 Features
 
-* **MySQL Database**: Persistent data storage with proper relationships
 * **JWT Authentication**: Secure user registration and login
 * **RESTful API**: Complete CRUD operations for items management
 * **Structured Architecture**: Organized code with controllers and routes
 * **Error Handling**: Comprehensive error management
 * **CORS Support**: Cross-origin resource sharing enabled
+* **MySQL Database**: Ready for persistent data storage (currently in-memory)
 
 ## 📁 Project Structure
 
@@ -47,14 +49,22 @@ A comprehensive Node.js Express API with MySQL database integration, JWT authent
    npm install
    ```
 
-3. **Set up MySQL database**
+3. **Start the server (in-memory mode)**
+   ```bash
+   npm start
+   # or for development
+   npm run dev
+   ```
+
+4. **Optional: Set up MySQL database**
    - Install MySQL on your system
    - Create a database and run the schema:
    ```bash
    mysql -u root -p < database/schema.sql
    ```
+   - Uncomment database connections in `app.js` and controllers
 
-4. **Set up environment variables**
+5. **Optional: Set up environment variables**
    Create a `.env` file in the root directory:
    ```
    app_port=3000
@@ -64,13 +74,6 @@ A comprehensive Node.js Express API with MySQL database integration, JWT authent
    DB_NAME=restful_api_db
    DB_PORT=3306
    JWT_SECRET=your-super-secret-jwt-key
-   ```
-
-5. **Start the server**
-   ```bash
-   npm start
-   # or for development
-   npm run dev
    ```
 
 ## 📡 API Endpoints
@@ -160,12 +163,12 @@ Content-Type: application/json
 
 This project demonstrates:
 
-1. **Database Integration**: MySQL with Node.js
-2. **Authentication**: JWT-based user authentication
-3. **API Security**: Password hashing and token validation
-4. **Error Handling**: Comprehensive error management
-5. **Code Organization**: Modular architecture
-6. **RESTful Design**: Standard HTTP methods and status codes
+1. **Authentication**: JWT-based user authentication
+2. **API Security**: Password hashing and token validation
+3. **Error Handling**: Comprehensive error management
+4. **Code Organization**: Modular architecture
+5. **RESTful Design**: Standard HTTP methods and status codes
+6. **Database Integration**: Ready for MySQL (currently in-memory)
 
 ## 🚨 Error Handling
 
@@ -178,11 +181,12 @@ The API includes comprehensive error handling:
 
 ## 📝 Development Notes
 
-* Data is persisted in MySQL database
+* Currently using in-memory storage for immediate testing
 * Passwords are hashed using bcrypt
 * JWT tokens expire after 24 hours
 * Input validation for all endpoints
 * CORS enabled for frontend integration
+* MySQL integration ready but disabled
 
 ## 🤝 Contributing
 
@@ -197,4 +201,4 @@ This project is for educational purposes and demonstrates Node.js Express best p
 
 ---
 
-**Note**: This is a learning project demonstrating advanced Express.js application development with MySQL and JWT authentication. Perfect for backend development portfolios!
+**Note**: This is a learning project demonstrating advanced Express.js application development with JWT authentication. Perfect for backend development portfolios!
